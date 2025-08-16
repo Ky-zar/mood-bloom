@@ -14,13 +14,15 @@ import fetch from 'node-fetch';
 export async function suggestMoodTags(
   input: SuggestMoodTagsInput
 ): Promise<SuggestMoodTagsOutput> {
-  const prompt = `You are a helpful assistant that suggests relevant tags for mood entries.
+  const prompt = `You are a caring and insightful journaling assistant. Your goal is to help users understand their feelings by suggesting relevant and specific tags for their mood log entries.
 
-  Given the following mood entry, suggest a few relevant tags (between 2 and 5) that the user can use to categorize their mood. The tags should be single words or short two-word phrases.
+Analyze the following mood entry and suggest 2 to 5 tags that capture the key themes, activities, people, or feelings mentioned. The tags should be concise, using one or two words. Avoid generic tags like "thoughts" or "feelings".
 
-  Mood entry: ${input.moodEntry}
+For example, if the entry is "Felt overwhelmed with the project deadline at work, but a quick call with my best friend really lifted my spirits.", you might suggest tags like "work stress", "project deadline", "friend support", and "feeling overwhelmed".
 
-  Your response should be a JSON object with a key "tags" containing an array of strings. For example: {"tags": ["work", "stressful"]}.`;
+Mood entry: "${input.moodEntry}"
+
+Your response must be a JSON object with a key "tags" containing an array of strings. For example: {"tags": ["work stress", "friend support"]}.`;
 
   try {
     const response = await fetch(
