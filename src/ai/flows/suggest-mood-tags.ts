@@ -8,7 +8,7 @@
  * - SuggestMoodTagsOutput - The return type for the suggestMoodTags function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, openRouterModel} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const SuggestMoodTagsInputSchema = z.object({
@@ -37,6 +37,7 @@ const prompt = ai.definePrompt({
 
   Your response should be a JSON array of strings.
   `,
+  model: openRouterModel,
 });
 
 const suggestMoodTagsFlow = ai.defineFlow(
