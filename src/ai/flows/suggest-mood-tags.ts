@@ -8,13 +8,13 @@
  * - SuggestMoodTagsOutput - The return type for the suggestMoodTags function.
  */
 
-import {ai, openRouterModel} from '@/ai/genkit';
+import {ai, openRouterModel} from '@/lib/genkit';
 import {z} from 'genkit';
 
 const SuggestMoodTagsInputSchema = z.object({
   moodEntry: z.string().describe('The text content of the mood entry.'),
 });
-export type SuggestMoodTagsInput = z.infer<typeof SuggestMoodTagsInputSchema>;
+type SuggestMoodTagsInput = z.infer<typeof SuggestMoodTagsInputSchema>;
 
 const SuggestMoodTagsOutputSchema = z.object({
   tags: z.array(z.string()).describe('An array of suggested tags for the mood entry.'),

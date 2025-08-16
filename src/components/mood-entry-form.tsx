@@ -17,7 +17,8 @@ import { Badge } from '@/components/ui/badge';
 import { useMoodStore } from '@/lib/store';
 import { type Mood, moodOptions } from '@/types';
 import { MoodSelector } from './mood-selector';
-import { suggestMoodTags, SuggestMoodTagsOutput } from '@/ai/flows/suggest-mood-tags';
+import { suggestMoodTags } from '@/ai/flows/suggest-mood-tags';
+import type { SuggestMoodTagsOutput } from '@/ai/flows/suggest-mood-tags';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from './ui/skeleton';
 
@@ -297,5 +298,3 @@ export function MoodEntryForm() {
     </Card>
   );
 }
-
-    
