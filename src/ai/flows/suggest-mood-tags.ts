@@ -8,7 +8,7 @@
 
 import {ai} from '@/lib/genkit';
 import {z} from 'genkit';
-import {SuggestMoodTagsOutputSchema, SuggestMoodTagsInputSchema, SuggestMoodTagsOutput} from '@/types';
+import {SuggestMoodTagsOutputSchema, SuggestMoodTagsInputSchema, type SuggestMoodTagsOutput} from '@/types';
 
 
 export async function suggestMoodTags(input: z.infer<typeof SuggestMoodTagsInputSchema>): Promise<SuggestMoodTagsOutput> {
