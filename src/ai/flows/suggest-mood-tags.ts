@@ -7,20 +7,11 @@
  */
 
 import {ai} from '@/lib/genkit';
-import {qwen} from '@/lib/genkit';
 import {z} from 'genkit';
+import {SuggestMoodTagsOutputSchema, SuggestMoodTagsInputSchema, SuggestMoodTagsOutput} from '@/types';
 
-const SuggestMoodTagsInputSchema = z.object({
-  moodEntry: z.string().describe('The text content of the mood entry.'),
-});
-type SuggestMoodTagsInput = z.infer<typeof SuggestMoodTagsInputSchema>;
 
-const SuggestMoodTagsOutputSchema = z.object({
-  tags: z.array(z.string()).describe('An array of suggested tags for the mood entry.'),
-});
-export type SuggestMoodTagsOutput = z.infer<typeof SuggestMoodTagsOutputSchema>;
-
-export async function suggestMoodTags(input: SuggestMoodTagsInput): Promise<SuggestMoodTagsOutput> {
+export async function suggestMoodTags(input: z.infer<typeof SuggestMoodTagsInputSchema>): Promise<SuggestMoodTagsOutput> {
   return suggestMoodTagsFlow(input);
 }
 
@@ -36,7 +27,7 @@ const prompt = ai.definePrompt({
 
   Your response should be a JSON array of strings.
   `,
-  model: qwen('qwen/qwen3-4b:free'),
+  model: 'googleai/qwen/qwen3-4b:free',
 });
 
 const suggestMoodTagsFlow = ai.defineFlow(
