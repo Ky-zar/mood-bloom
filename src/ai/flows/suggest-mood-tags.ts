@@ -60,6 +60,11 @@ export async function suggestMoodTags(
 
     const parsedContent = JSON.parse(content);
 
+    // Replace underscores with spaces in tags
+    if (parsedContent.tags && Array.isArray(parsedContent.tags)) {
+        parsedContent.tags = parsedContent.tags.map((tag: string) => tag.replace(/_/g, ' '));
+    }
+
     // Validate the parsed content against the Zod schema
     const validatedOutput = SuggestMoodTagsOutputSchema.parse(parsedContent);
 
