@@ -22,4 +22,9 @@ export const ai = genkit({
   model: 'googleai/gemini-2.0-flash',
 });
 
-export const openRouterModel = ai.model<GoogleAIGeminiModel>(openRouterMistral.name);
+export const openRouterModel: ModelReference<GoogleAIGeminiModel> = {
+  name: openRouterMistral.name,
+  config: {},
+  plugins: [],
+  type: 'generate'
+};
