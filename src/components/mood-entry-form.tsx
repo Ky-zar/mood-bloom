@@ -18,7 +18,6 @@ import { useMoodStore } from '@/lib/store';
 import { type Mood, moodOptions } from '@/types';
 import { MoodSelector } from './mood-selector';
 import { suggestMoodTags } from '@/ai/flows/suggest-mood-tags';
-import type { SuggestMoodTagsOutput } from '@/ai/flows/suggest-mood-tags';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from './ui/skeleton';
 
@@ -82,8 +81,8 @@ export function MoodEntryForm() {
     }
     setIsSuggesting(true);
     try {
-      const result: SuggestMoodTagsOutput = await suggestMoodTags({ moodEntry: notes });
-      setSuggestedTags(result.tags.filter(tag => !tags.includes(tag)));
+      const result = await suggestMoodTags({ moodEntry: notes });
+      setSuggestedTags(result.tags);
     } catch (error) {
       console.error("Failed to suggest tags:", error);
       toast({
@@ -94,7 +93,7 @@ export function MoodEntryForm() {
     } finally {
       setIsSuggesting(false);
     }
-  }, 1000), [tags, toast]);
+  }, 1000), [toast]);
 
   const handleNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     form.setValue('notes', e.target.value);
@@ -105,7 +104,6 @@ export function MoodEntryForm() {
     const newTag = tag.trim().toLowerCase();
     if (newTag && !tags.includes(newTag)) {
         setTags([...tags, newTag]);
-        setSuggestedTags(prev => prev.filter(t => t !== newTag));
     }
   };
 
@@ -221,7 +219,7 @@ export function MoodEntryForm() {
                     ) : (
                         <div className="flex flex-wrap gap-2">
                             {suggestedTags.map((tag) => (
-                                <Button type="button" variant="outline" size="sm" key={tag} onClick={() => { handleAddTag(tag); }}>
+                                <Button type="button" variant="outline" size="sm" key={tag} onClick={() => { handleAddTag(tag); }} disabled={tags.includes(tag)}>
                                     {tag}
                                 </Button>
                             ))}
