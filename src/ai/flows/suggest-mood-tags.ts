@@ -31,7 +31,7 @@ const prompt = ai.definePrompt({
   output: {schema: SuggestMoodTagsOutputSchema},
   prompt: `You are a helpful assistant that suggests relevant tags for mood entries.
 
-  Given the following mood entry, suggest a few relevant tags that the user can use to categorize their mood:
+  Given the following mood entry, suggest a few relevant tags (between 2 and 5) that the user can use to categorize their mood. The tags should be single words or short two-word phrases.
 
   Mood entry: {{{moodEntry}}}
 

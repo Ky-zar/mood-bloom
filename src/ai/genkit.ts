@@ -1,27 +1,26 @@
 import {genkit, ModelReference} from 'genkit';
 import {googleAI, GoogleAIGeminiModel} from '@genkit-ai/googleai';
 
+// This configures a model proxy for OpenRouter, which uses an OpenAI-compatible API.
 const openRouterMistral = {
-  name: 'openrouter/mistral',
+  name: 'openrouter/mistral-7b-instruct', // Using a more specific name
+  type: 'generate' as const,
   model: 'mistralai/mistral-7b-instruct',
   apiKey: process.env.OPENROUTER_API_KEY,
   apiHost: 'https://openrouter.ai/api/v1',
-} as const;
+};
 
 export const ai = genkit({
   plugins: [
     googleAI({
-      models: [
-        {
-          ...openRouterMistral,
-          type: 'generate',
-        },
-      ],
+      // The googleAI plugin can be used for OpenAI-compatible endpoints.
+      models: [openRouterMistral],
     }),
   ],
-  model: 'googleai/gemini-2.0-flash',
+  model: 'googleai/gemini-2.0-flash', // Default model remains Gemini
 });
 
+// We export a reference to the configured OpenRouter model.
 export const openRouterModel: ModelReference<GoogleAIGeminiModel> = {
   name: openRouterMistral.name,
   config: {},
