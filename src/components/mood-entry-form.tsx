@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useCallback } from 'react';
+import { useState, useTransition, useCallback, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,6 +19,7 @@ import { type Mood, moodOptions } from '@/types';
 import { MoodSelector } from './mood-selector';
 import { suggestMoodTags, SuggestMoodTagsOutput } from '@/ai/flows/suggest-mood-tags';
 import { useToast } from '@/hooks/use-toast';
+import { Skeleton } from './ui/skeleton';
 
 const moodEntrySchema = z.object({
   mood: z.custom<Mood>((val) => moodOptions.includes(val as Mood), {
@@ -54,15 +55,24 @@ export function MoodEntryForm() {
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const form = useForm<MoodEntryFormData>({
     resolver: zodResolver(moodEntrySchema),
     defaultValues: {
-      date: new Date(),
       notes: '',
       tags: [],
     },
   });
+
+  useEffect(() => {
+    form.reset({
+        date: new Date(),
+        notes: '',
+        tags: [],
+    });
+    setIsHydrated(true);
+  }, [form]);
 
   const debouncedSuggestTags = useCallback(debounce(async (notes: string) => {
     if (notes.trim().length < 10) {
@@ -131,6 +141,40 @@ export function MoodEntryForm() {
       });
     });
   };
+
+  if (!isHydrated) {
+    return (
+        <Card className="w-full max-w-2xl mx-auto shadow-lg">
+            <CardHeader>
+                <CardTitle className="font-headline text-3xl">How are you feeling today?</CardTitle>
+                <CardDescription>Log your mood to track your emotional well-being.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-8">
+                <div className="flex justify-center space-x-4 py-4">
+                    {moodOptions.map(mood => <Skeleton key={mood} className="h-20 w-20 rounded-full" />)}
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="notes">Notes</Label>
+                    <Skeleton className="h-32 w-full" />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="tags">Tags</Label>
+                    <Skeleton className="h-10 w-full" />
+                </div>
+                 <div className="space-y-2">
+                    <Label>Date</Label>
+                    <Skeleton className="h-10 w-full" />
+                </div>
+            </CardContent>
+             <CardFooter>
+                <Button className="w-full" disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading...
+                </Button>
+            </CardFooter>
+        </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-lg">
@@ -253,3 +297,5 @@ export function MoodEntryForm() {
     </Card>
   );
 }
+
+    
