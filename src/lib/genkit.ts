@@ -1,28 +1,11 @@
-import {genkit, ModelReference} from 'genkit';
-import {googleAI, GoogleAIGeminiModel} from '@genkit-ai/googleai';
+import {genkit} from 'genkit';
+import {googleAI} from '@genkit-ai/googleai';
 
-// This configures a model proxy for OpenRouter, which uses an OpenAI-compatible API.
-const openRouterQwen = {
-  name: 'openrouter/qwen-qwen3-4b-free',
-  type: 'generate' as const,
-  model: 'qwen/qwen3-4b:free',
+export const qwen = googleAI({
   apiKey: process.env.OPENROUTER_API_KEY,
-  apiHost: 'https://openrouter.ai/api/v1',
-};
-
-export const ai = genkit({
-  plugins: [
-    googleAI({
-      apiKey: 'none',
-      models: [openRouterQwen],
-    }),
-  ],
+  baseURL: 'https://openrouter.ai/api/v1',
 });
 
-// We export a reference to the configured OpenRouter model.
-export const openRouterModel: ModelReference<GoogleAIGeminiModel> = {
-  name: openRouterQwen.name,
-  config: {},
+export const ai = genkit({
   plugins: [],
-  type: 'generate'
-};
+});

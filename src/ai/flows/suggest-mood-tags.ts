@@ -4,11 +4,10 @@
  * @fileOverview A mood tag suggestion AI agent.
  *
  * - suggestMoodTags - A function that suggests relevant tags for mood entries.
- * - SuggestMoodTagsInput - The input type for the suggestMoodTags function.
- * - SuggestMoodTagsOutput - The return type for the suggestMoodTags function.
  */
 
-import {ai, openRouterModel} from '@/lib/genkit';
+import {ai} from '@/lib/genkit';
+import {qwen} from '@/lib/genkit';
 import {z} from 'genkit';
 
 const SuggestMoodTagsInputSchema = z.object({
@@ -37,7 +36,7 @@ const prompt = ai.definePrompt({
 
   Your response should be a JSON array of strings.
   `,
-  model: openRouterModel,
+  model: qwen('qwen/qwen3-4b:free'),
 });
 
 const suggestMoodTagsFlow = ai.defineFlow(
