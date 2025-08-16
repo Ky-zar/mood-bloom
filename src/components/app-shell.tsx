@@ -14,6 +14,7 @@ import {
   SidebarFooter,
   SidebarTrigger,
   SidebarInset,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 
@@ -23,11 +24,16 @@ const menuItems = [
   { href: "/trends", label: "Trends", icon: LayoutDashboard },
 ];
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+function AppShellContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
+
+  const handleLinkClick = () => {
+    setOpenMobile(false);
+  };
 
   return (
-    <SidebarProvider>
+    <>
       <Sidebar>
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
@@ -48,6 +54,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   isActive={pathname === item.href}
                   className="w-full justify-start"
                   tooltip={item.label}
+                  onClick={handleLinkClick}
                 >
                   <Link href={item.href}>
                     <item.icon />
@@ -71,6 +78,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {children}
         </main>
       </SidebarInset>
+    </>
+  );
+}
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <AppShellContent>{children}</AppShellContent>
     </SidebarProvider>
   );
 }
