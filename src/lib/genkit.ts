@@ -7,5 +7,5 @@ export const qwen = googleAI({
 });
 
 export const ai = genkit({
-  plugins: [],
+  plugins: [qwen],
 });
