@@ -65,6 +65,13 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
+        mood: {
+          radiant: 'hsl(var(--mood-radiant))',
+          good: 'hsl(var(--mood-good))',
+          meh: 'hsl(var(--mood-meh))',
+          bad: 'hsl(var(--mood-bad))',
+          awful: 'hsl(var(--mood-awful))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
