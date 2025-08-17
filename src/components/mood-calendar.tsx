@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useMoodStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -9,6 +9,7 @@ import { type MoodEntry, type Mood } from '@/types';
 import { Badge } from './ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { cn } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
 
 
 const moodColorClasses: Record<Mood, string> = {
@@ -61,8 +62,12 @@ function DayWithPopover({ date, entry }: { date: Date, entry: MoodEntry | undefi
 
 
 export function MoodCalendar() {
-  const entries = useMoodStore((state) => state.entries);
+  const { entries, fetchEntries, loading } = useMoodStore();
   const [month, setMonth] = useState(new Date());
+
+  useEffect(() => {
+    fetchEntries();
+  }, [fetchEntries]);
 
   const entriesByDate = useMemo(() => {
     return entries.reduce((acc, entry) => {
@@ -95,21 +100,27 @@ export function MoodCalendar() {
         <CardDescription>A visual overview of your mood patterns. Click on a day to see details.</CardDescription>
       </CardHeader>
       <CardContent className="flex justify-center">
-        <Calendar
-          mode="single"
-          month={month}
-          onMonthChange={setMonth}
-          modifiers={modifiers}
-          modifiersClassNames={moodColorClasses}
-          className="p-0"
-          components={{
-            Day: ({ date, ...props }) => {
-                const dateKey = format(date, 'yyyy-MM-dd');
-                const entry = entriesByDate[dateKey];
-                return <DayWithPopover date={date} entry={entry} />;
-            }
-          }}
-        />
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <Calendar
+            mode="single"
+            month={month}
+            onMonthChange={setMonth}
+            modifiers={modifiers}
+            modifiersClassNames={moodColorClasses}
+            className="p-0"
+            components={{
+              Day: ({ date, ...props }) => {
+                  const dateKey = format(date, 'yyyy-MM-dd');
+                  const entry = entriesByDate[dateKey];
+                  return <DayWithPopover date={date} entry={entry} />;
+              }
+            }}
+          />
+        )}
       </CardContent>
     </Card>
   );

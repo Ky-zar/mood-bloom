@@ -29,7 +29,6 @@ const moodEntrySchema = z.object({
     required_error: "A date is required.",
   }),
   notes: z.string().optional(),
-  tags: z.array(z.string()).optional(),
 });
 
 type MoodEntryFormData = z.infer<typeof moodEntrySchema>;
@@ -61,7 +60,6 @@ export function MoodEntryForm() {
     resolver: zodResolver(moodEntrySchema),
     defaultValues: {
       notes: '',
-      tags: [],
     },
   });
 
@@ -69,7 +67,6 @@ export function MoodEntryForm() {
     form.reset({
         date: new Date(),
         notes: '',
-        tags: [],
     });
     setIsHydrated(true);
   }, [form]);
@@ -121,16 +118,14 @@ export function MoodEntryForm() {
 
 
   const onSubmit = (data: MoodEntryFormData) => {
-    startTransition(() => {
-      addEntry({
+    startTransition(async () => {
+      await addEntry({
         ...data,
         tags: tags,
-        date: data.date.toISOString(),
       });
       form.reset({
         date: new Date(),
         notes: '',
-        tags: [],
       });
       setTags([]);
       setSuggestedTags([]);
