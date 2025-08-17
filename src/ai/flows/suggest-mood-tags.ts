@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -16,7 +17,7 @@ export async function suggestMoodTags(
 ): Promise<SuggestMoodTagsOutput> {
   const prompt = `You are a caring and insightful journaling assistant. Your goal is to help users understand their feelings by suggesting relevant and specific tags for their mood log entries.
 
-Analyze the following mood entry and suggest 2 to 5 tags that capture the key themes, activities, people, or feelings mentioned. The tags should be concise, using one or two words. Avoid generic tags like "thoughts" or "feelings".
+Analyze the following mood entry and suggest 2 to 5 tags that capture the key themes, activities, people, or feelings mentioned. The tags should be concise, using one or two words. Replace any underscores with spaces. Avoid generic tags like "thoughts" or "feelings".
 
 For example, if the entry is "Felt overwhelmed with the project deadline at work, but a quick call with my best friend really lifted my spirits.", you might suggest tags like "work stress", "project deadline", "friend support", and "feeling overwhelmed".
 

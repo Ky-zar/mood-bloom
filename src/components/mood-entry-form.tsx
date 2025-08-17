@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useTransition, useCallback, useEffect } from 'react';
@@ -33,19 +34,6 @@ const moodEntrySchema = z.object({
 
 type MoodEntryFormData = z.infer<typeof moodEntrySchema>;
 
-// Debounce function
-function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
-    let timeout: NodeJS.Timeout;
-    return (...args: Parameters<F>): Promise<ReturnType<F>> =>
-        new Promise(resolve => {
-            if (timeout) {
-                clearTimeout(timeout);
-            }
-            timeout = setTimeout(() => resolve(func(...args)), waitFor);
-        });
-}
-
-
 export function MoodEntryForm() {
   const { toast } = useToast();
   const addEntry = useMoodStore((state) => state.addEntry);
@@ -71,30 +59,45 @@ export function MoodEntryForm() {
     setIsHydrated(true);
   }, [form]);
 
-  const debouncedSuggestTags = useCallback(debounce(async (notes: string) => {
-    if (notes.trim().length < 10) {
-      setSuggestedTags([]);
-      return;
-    }
-    setIsSuggesting(true);
-    try {
-      const result = await suggestMoodTags({ moodEntry: notes });
-      setSuggestedTags(result.tags);
-    } catch (error) {
-      console.error("Failed to suggest tags:", error);
-      toast({
-          variant: "destructive",
-          title: "AI Error",
-          description: "Could not fetch tag suggestions.",
-      });
-    } finally {
-      setIsSuggesting(false);
-    }
-  }, 1000), [toast]);
+  const debouncedSuggestTags = useCallback(
+    (() => {
+      let timeout: NodeJS.Timeout;
+      return (notes: string) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(async () => {
+          if (notes.trim().length < 10) {
+            setSuggestedTags([]);
+            return;
+          }
+          setIsSuggesting(true);
+          try {
+            const result = await suggestMoodTags({ moodEntry: notes });
+            setSuggestedTags(result.tags);
+          } catch (error) {
+            console.error("Failed to suggest tags:", error);
+            toast({
+              variant: "destructive",
+              title: "AI Error",
+              description: "Could not fetch tag suggestions.",
+            });
+          } finally {
+            setIsSuggesting(false);
+          }
+        }, 1000);
+      };
+    })(),
+    [toast]
+  );
+
 
   const handleNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     form.setValue('notes', e.target.value);
-    debouncedSuggestTags(e.target.value);
+    const newNotes = e.target.value;
+    if (newNotes.trim().length === 0) {
+        setSuggestedTags([]);
+    } else {
+        debouncedSuggestTags(newNotes);
+    }
   };
   
   const handleAddTag = (tag: string) => {
