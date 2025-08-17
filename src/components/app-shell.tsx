@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookMarked, CalendarDays, LayoutDashboard, Flower2 } from "lucide-react";
+import { BookMarked, CalendarDays, LayoutDashboard, Flower2, LogOut } from "lucide-react";
 import {
   SidebarProvider,
   Sidebar,
@@ -17,6 +17,12 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
+import { useAuth, AuthProvider } from "./auth-provider";
+import { signOut } from "@/lib/auth";
+import { useMoodStore } from "@/lib/store";
+import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+
 
 const menuItems = [
   { href: "/log-mood", label: "Log Mood", icon: BookMarked },
@@ -24,9 +30,50 @@ const menuItems = [
   { href: "/trends", label: "Trends", icon: LayoutDashboard },
 ];
 
+function AuthArea() {
+    const { user, loading } = useAuth();
+    const router = useRouter();
+    const clearEntries = useMoodStore(state => state.clearEntries);
+
+    const handleSignOut = async () => {
+        await signOut();
+        clearEntries();
+        router.push('/');
+    };
+
+    if (loading) {
+        return <div className="p-4"><Button className="w-full" disabled>Loading...</Button></div>;
+    }
+
+    if (user) {
+        return (
+             <div className="flex flex-col gap-2 p-2">
+                <div className="flex items-center gap-2 p-2 rounded-md bg-sidebar-accent">
+                    <Avatar className="h-8 w-8">
+                        <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium text-sidebar-accent-foreground truncate">{user.email}</span>
+                </div>
+                <Button variant="ghost" className="justify-start" onClick={handleSignOut}>
+                    <LogOut />
+                    <span>Sign Out</span>
+                </Button>
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex flex-col gap-2 p-4">
+            <Button asChild><Link href="/login">Login</Link></Button>
+            <Button asChild variant="secondary"><Link href="/signup">Sign Up</Link></Button>
+        </div>
+    );
+}
+
 function AppShellContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
+  const { user } = useAuth();
 
   const handleLinkClick = () => {
     setOpenMobile(false);
@@ -46,26 +93,30 @@ function AppShellContent({ children }: { children: React.ReactNode }) {
           </div>
         </SidebarHeader>
         <SidebarContent>
-          <SidebarMenu>
-            {menuItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === item.href}
-                  className="w-full justify-start"
-                  tooltip={item.label}
-                  onClick={handleLinkClick}
-                >
-                  <Link href={item.href}>
-                    <item.icon />
-                    <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+            {user && (
+                <SidebarMenu>
+                    {menuItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                        <SidebarMenuButton
+                        asChild
+                        isActive={pathname === item.href}
+                        className="w-full justify-start"
+                        tooltip={item.label}
+                        onClick={handleLinkClick}
+                        >
+                        <Link href={item.href}>
+                            <item.icon />
+                            <span>{item.label}</span>
+                        </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    ))}
+                </SidebarMenu>
+            )}
         </SidebarContent>
-        <SidebarFooter/>
+        <SidebarFooter>
+            <AuthArea />
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:h-16 md:px-6">
@@ -84,8 +135,10 @@ function AppShellContent({ children }: { children: React.ReactNode }) {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
-      <AppShellContent>{children}</AppShellContent>
-    </SidebarProvider>
+    <AuthProvider>
+        <SidebarProvider>
+            <AppShellContent>{children}</AppShellContent>
+        </SidebarProvider>
+    </AuthProvider>
   );
 }

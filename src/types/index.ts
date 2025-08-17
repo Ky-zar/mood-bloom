@@ -6,6 +6,7 @@ export const moodOptions: Mood[] = ['radiant', 'good', 'meh', 'bad', 'awful'];
 
 export interface MoodEntry {
   id: string;
+  userId: string;
   mood: Mood;
   notes?: string;
   tags: string[];
