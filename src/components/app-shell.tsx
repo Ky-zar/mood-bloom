@@ -19,7 +19,7 @@ import {
 import { Button } from "./ui/button";
 
 const menuItems = [
-  { href: "/", label: "Log Mood", icon: BookMarked },
+  { href: "/log-mood", label: "Log Mood", icon: BookMarked },
   { href: "/calendar", label: "Calendar", icon: CalendarDays },
   { href: "/trends", label: "Trends", icon: LayoutDashboard },
 ];

@@ -1,9 +1,9 @@
-import { MoodEntryForm } from "@/components/mood-entry-form";
+import { HomePage } from "@/components/home-page";
 
 export default function Home() {
   return (
     <div className="w-full">
-      <MoodEntryForm />
+      <HomePage />
     </div>
   );
 }
