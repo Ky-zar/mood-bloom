@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -17,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signUpWithEmail, signInWithGoogle } from "@/lib/auth";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
@@ -46,8 +47,13 @@ export function SignupForm() {
     resolver: zodResolver(signupSchema),
   });
 
+  useEffect(() => {
+    if (user) {
+      router.push('/log-mood');
+    }
+  }, [user, router]);
+
   if (user) {
-    router.push('/log-mood');
     return null;
   }
 
