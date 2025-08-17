@@ -4,6 +4,8 @@ import {
     signInWithEmailAndPassword, 
     signOut as firebaseSignOut,
     onAuthStateChanged,
+    GoogleAuthProvider,
+    signInWithPopup,
     type User
 } from "firebase/auth";
 import { app } from "./firebase";
@@ -27,6 +29,17 @@ export const signInWithEmail = async (email: string, password: string): Promise<
         return { user: null, error: error.message };
     }
 };
+
+export const signInWithGoogle = async (): Promise<{ user: User | null; error: string | null; }> => {
+    const provider = new GoogleAuthProvider();
+    try {
+        const result = await signInWithPopup(auth, provider);
+        return { user: result.user, error: null };
+    } catch (error: any) {
+        return { user: null, error: error.message };
+    }
+};
+
 
 export const signOut = async (): Promise<{ error: string | null; }> => {
     try {
