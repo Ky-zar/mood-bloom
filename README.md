@@ -46,4 +46,4 @@ Hey! This is Ky.zar and this is Mood Bloom, a personal journaling app I built to
 
 ## 💡 Fun Fact
 
-This project was also part of my “build-in-public” challenge. While Firebase Studio sped up the base setup, I customized every piece by hand to make sure Mood Bloom is polished, responsive, and production-ready.
+This project was also part of my “build-in-public” challenge.
