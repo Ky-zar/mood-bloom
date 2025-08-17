@@ -62,7 +62,7 @@ export function SignupForm() {
             title: "Account Created",
             description: "Welcome to Mood Bloom!",
         });
-        router.push("/log-mood");
+        router.push("/welcome");
       }
     });
   };
@@ -78,7 +78,11 @@ export function SignupForm() {
                 title: "Account Created",
                 description: "Welcome to Mood Bloom!",
             });
-            router.push("/log-mood");
+            if (result.isNewUser) {
+                router.push("/welcome");
+            } else {
+                router.push("/log-mood");
+            }
         }
     });
   }

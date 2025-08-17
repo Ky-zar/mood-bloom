@@ -46,13 +46,14 @@ function AuthArea() {
     }
 
     if (user) {
+        const fallback = (user.displayName || user.email || "U")[0].toUpperCase();
         return (
              <div className="flex flex-col gap-2 p-2">
                 <div className="flex items-center gap-2 p-2 rounded-md bg-sidebar-accent">
                     <Avatar className="h-8 w-8">
-                        <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
+                        <AvatarFallback>{fallback}</AvatarFallback>
                     </Avatar>
-                    <span className="text-sm font-medium text-sidebar-accent-foreground truncate">{user.email}</span>
+                    <span className="text-sm font-medium text-sidebar-accent-foreground truncate">{user.displayName || user.email}</span>
                 </div>
                 <Button variant="ghost" className="justify-start" onClick={handleSignOut}>
                     <LogOut />

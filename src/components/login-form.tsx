@@ -62,7 +62,11 @@ export function LoginForm() {
             title: "Logged In",
             description: "Welcome back!",
         });
-        router.push("/log-mood");
+        if (result.isNewUser) {
+            router.push("/welcome");
+        } else {
+            router.push("/log-mood");
+        }
       }
     });
   };
@@ -78,7 +82,11 @@ export function LoginForm() {
                 title: "Logged In",
                 description: "Welcome!",
             });
-            router.push("/log-mood");
+            if (result.isNewUser) {
+                router.push("/welcome");
+            } else {
+                router.push("/log-mood");
+            }
         }
     });
   }
