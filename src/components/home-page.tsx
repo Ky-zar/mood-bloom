@@ -3,8 +3,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Flower2, Calendar, Sparkles, Bot } from "lucide-react";
+import { Flower2, Calendar, Sparkles, Bot, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "./auth-provider";
 
 const features = [
     {
@@ -30,6 +31,11 @@ const features = [
 ];
 
 export function HomePage() {
+  const { user, loading } = useAuth();
+
+  const buttonText = user ? "Go to Your Dashboard" : "Get Started for Free";
+  const buttonLink = user ? "/log-mood" : "/signup";
+
   return (
     <div className="space-y-12">
       <section className="text-center">
@@ -39,8 +45,15 @@ export function HomePage() {
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
           Your personal space to understand your feelings, notice patterns, and nurture your well-being. Start your journey of self-discovery, one mood at a time.
         </p>
-        <Button asChild size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90">
-          <Link href="/log-mood">Log Your First Mood</Link>
+        <Button asChild size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90" disabled={loading}>
+          {loading ? (
+             <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Loading...
+             </>
+          ) : (
+            <Link href={buttonLink}>{buttonText}</Link>
+          )}
         </Button>
       </section>
 
