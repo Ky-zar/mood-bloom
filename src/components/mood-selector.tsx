@@ -1,13 +1,13 @@
 "use client";
 
-import { Smile, Frown, Meh, Angry, HeartPulse } from 'lucide-react';
+import { Laugh, Smile, Frown, Meh, Angry } from 'lucide-react';
 import { type Mood, moodOptions } from '@/types';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 
 const moodIcons: Record<Mood, React.ReactElement> = {
-  radiant: <Smile className="h-10 w-10 text-mood-radiant" />,
-  good: <HeartPulse className="h-10 w-10 text-mood-good" />,
+  radiant: <Laugh className="h-10 w-10 text-mood-radiant" />,
+  good: <Smile className="h-10 w-10 text-mood-good" />,
   meh: <Meh className="h-10 w-10 text-mood-meh" />,
   bad: <Frown className="h-10 w-10 text-mood-bad" />,
   awful: <Angry className="h-10 w-10 text-mood-awful" />,
