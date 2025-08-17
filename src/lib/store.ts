@@ -1,3 +1,4 @@
+
 import { create } from 'zustand';
 import type { MoodEntry } from '@/types';
 import { db } from './firebase';
