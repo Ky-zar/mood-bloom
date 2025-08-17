@@ -1,10 +1,10 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Flower2, BarChart, Calendar, Bot } from "lucide-react";
+import { Flower2, Calendar, Sparkles, Bot } from "lucide-react";
 import Link from "next/link";
-import Image from 'next/image';
 
 const features = [
     {
@@ -18,9 +18,9 @@ const features = [
         description: "See your moods on a color-coded calendar to easily spot patterns.",
     },
     {
-        icon: <BarChart className="h-10 w-10 text-primary" />,
-        title: "Discover Trends",
-        description: "Understand your emotional landscape with insightful weekly and monthly charts.",
+        icon: <Sparkles className="h-10 w-10 text-primary" />,
+        title: "Uncover Your Patterns",
+        description: "Gently discover connections and insights into your emotional well-being over time.",
     },
     {
         icon: <Bot className="h-10 w-10 text-primary" />,
@@ -33,9 +33,6 @@ export function HomePage() {
   return (
     <div className="space-y-12">
       <section className="text-center">
-        <div className="flex justify-center mb-6">
-          <Image src="https://placehold.co/600x400.png" alt="Calm landscape" width={600} height={400} className="rounded-xl shadow-lg" data-ai-hint="calm landscape" />
-        </div>
         <h1 className="text-4xl md:text-5xl font-bold font-headline text-gray-800">
           Welcome to <span className="text-primary">Mood Bloom</span>
         </h1>
