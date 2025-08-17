@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { MoodEntry } from '@/types';
 import { db } from './firebase';
-import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
 
 interface MoodStore {
     entries: MoodEntry[];
@@ -39,7 +39,6 @@ export const useMoodStore = create<MoodStore>((set, get) => ({
         try {
             await addDoc(collection(db, 'moods'), {
                 ...entry,
-                // Use Firestore server timestamp
                 date: entry.date,
             });
             // Refresh entries after adding a new one
